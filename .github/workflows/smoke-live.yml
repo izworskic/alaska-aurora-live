@@ -1,0 +1,33 @@
+name: Production API Smoke
+on:
+  push:
+    paths:
+      - '.github/workflows/smoke-live.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for production API and verify Alaska payload
+        shell: bash
+        run: |
+          set -euo pipefail
+          url='https://alaska-aurora-live.vercel.app/api/aurora?region=fairbanks'
+          ok=0
+          for i in $(seq 1 12); do
+            code=$(curl -L -sS -o /tmp/aurora.json -w '%{http_code}' --max-time 20 "$url" || true)
+            if [ "$code" = "200" ] && node -e "const d=require('/tmp/aurora.json'); if(d?.state?.name!=='Alaska'||!d?.fetched_at) process.exit(1)"; then
+              ok=1
+              break
+            fi
+            echo "Attempt $i: HTTP $code"
+            sleep 10
+          done
+          if [ "$ok" != "1" ]; then
+            echo 'Production Alaska API did not return a valid payload.'
+            cat /tmp/aurora.json 2>/dev/null || true
+            exit 1
+          fi
+          node -e "const d=require('/tmp/aurora.json'); console.log(JSON.stringify({state:d.state.name,region:d.selected_region?.id,score:d.verdict?.score,fetched_at:d.fetched_at,degraded:d.degraded},null,2))"
