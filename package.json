@@ -1,10 +1,1 @@
-{
-  "name": "@izworskic/alaska-aurora-live",
-  "version": "1.0.0",
-  "private": false,
-  "scripts": {
-    "test": "node --test tests/*.test.js",
-    "build": "node scripts/validate-build.mjs"
-  },
-  "engines": {"node": "22.x"}
-}
+{"name":"alaska-aurora-live","version":"1.0.0","private":true,"scripts":{"test":"node --test tests/*.test.js","build":"node scripts/generate-location-pages.mjs && node scripts/validate-build.mjs"},"engines":{"node":">=20"}}
