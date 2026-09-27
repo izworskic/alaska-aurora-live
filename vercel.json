@@ -1,1 +1,32 @@
-{"trailingSlash":false,"buildCommand":"npm test && npm run build","outputDirectory":"public","functions":{"api/aurora.js":{"maxDuration":15}},"rewrites":[{"source":"/national-tools/aurora/alaska/","destination":"/index.html"},{"source":"/national-tools/aurora/alaska/fairbanks/","destination":"/fairbanks/index.html"},{"source":"/national-tools/aurora/alaska/anchorage/","destination":"/anchorage/index.html"},{"source":"/national-tools/aurora/alaska/denali/","destination":"/denali/index.html"},{"source":"/national-tools/aurora/alaska/aurora-locations-sitemap.xml","destination":"/aurora-locations-sitemap.xml"}]}
+{
+  "trailingSlash": false,
+  "buildCommand": "npm test && npm run build && node scripts/inject-network-ads.mjs public",
+  "outputDirectory": "public",
+  "functions": {
+    "api/aurora.js": {
+      "maxDuration": 15
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/national-tools/aurora/alaska/",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/alaska/fairbanks/",
+      "destination": "/fairbanks/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/alaska/anchorage/",
+      "destination": "/anchorage/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/alaska/denali/",
+      "destination": "/denali/index.html"
+    },
+    {
+      "source": "/national-tools/aurora/alaska/aurora-locations-sitemap.xml",
+      "destination": "/aurora-locations-sitemap.xml"
+    }
+  ]
+}
