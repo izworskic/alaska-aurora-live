@@ -98,6 +98,7 @@ let sky={updated_at:null,periods:[]},nights=[],tz=STATE.time_zone_fallback;
       solar_wind:solar,cloud_percent:cloud,best_dark_window:best,moon:moonData
     },
     three_night_outlook:groupNights(forecast.periods,tz),
+    forecast_kp_periods:forecast.periods.filter(p=>Number.isFinite(p.kp)&&Number.isFinite(Date.parse(p.time_tag))).slice(0,32).map(p=>({time_tag:p.time_tag,kp:p.kp,observed:p.observed||null})),
     regions:regional,
     notes:{
       score:"Our 0–100 viewing score is a planning index, not a percent probability of seeing aurora.",
