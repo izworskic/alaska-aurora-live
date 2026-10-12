@@ -34,16 +34,27 @@
 #state-sky-lab .sky-spots a{font-size:12px;line-height:1.4;color:#245b43;display:block;padding:4px 0}
 #state-sky-lab .sky-spots a span{font-size:10px;display:block;color:#708177}
 #state-sky-lab .leaflet-popup-content{font-family:system-ui,sans-serif;line-height:1.55;font-size:12px}
+#state-sky-lab .sky-map-shell{position:relative;isolation:isolate}
+#state-sky-lab .sky-map-brand{position:absolute;left:12px;bottom:36px;z-index:6;background:#0c1527da;border-radius:5px;padding:3px 7px;display:flex;align-items:center}
+#state-sky-lab .sky-map-brand[hidden]{display:none}
+#state-sky-lab .sky-map-brand img{display:block;height:24px;width:auto;max-width:160px}
+#state-sky-lab .maplibregl-ctrl-attrib{background:#fffdf3!important;color:#1b2b27!important;font-size:10px!important}
+#state-sky-lab .maplibregl-ctrl-attrib a{color:#1d4039!important}
+#state-sky-lab .maplibregl-popup-content{font:12px/1.55 system-ui,sans-serif;color:#16352d;border-radius:7px}
+#state-sky-lab .maplibregl-popup-content button{cursor:pointer}
+#state-sky-lab .sky-map-layer-status{font:11px system-ui,sans-serif;color:#59695e;padding:5px 19px 7px}
+
 #state-sky-lab .sky-footer{color:#56685f;font-size:12px;line-height:1.6;margin:9px 2px 0}
 @media(max-width:760px){#state-sky-lab .sky-tiles{grid-template-columns:1fr}#state-sky-lab #stateRegionMap{height:310px}#state-sky-lab .sky-spots{grid-template-columns:1fr}#state-sky-lab .sky-intro{padding:18px}}
 @media(prefers-reduced-motion:reduce){#state-sky-lab *{scroll-behavior:auto}}
 </style><meta name="twitter:title" content="Northern Lights Alaska Tonight: Live Aurora Forecast | Chris Izworski">
 <meta name="twitter:description" content="Will the northern lights be visible in Alaska tonight? Live NOAA aurora signal, Kp, solar wind, NWS clouds, darkness, moonlight and state viewing regions.">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css">
 </head><body><header class="header"><a class="site-title" href="https://chrisizworski.com/">Chris Izworski</a></header><nav class="nav"><a href="https://chrisizworski.com/">Home</a><a href="https://chrisizworski.com/tools/">Michigan Tools</a><a href="https://chrisizworski.com/national-tools/">National Tools</a><a href="https://chrisizworski.com/national-tools/aurora/">U.S. Aurora</a></nav><div class="live-strip"><span class="dot">●</span> LIVE NOAA + NWS AURORA DECISION TOOL <span id="updated"></span></div><main class="body"><div class="breadcrumb"><a href="https://chrisizworski.com/">Home</a> › <a href="https://chrisizworski.com/national-tools/">National Tools</a> › <a href="https://chrisizworski.com/national-tools/aurora/">Aurora</a> › Alaska</div><h1>Northern Lights Alaska Tonight</h1><div class="sub">Live aurora activity, clouds, darkness and viewing windows across Alaska.</div><section class="hero"><div class="hero-grid"><div class="gauge" id="gauge" style="--deg:0deg"><div class="gauge-inner"><div class="score" id="score">—</div><div class="score-label">Viewing score</div></div></div><div><div class="tonight-label">Tonight in <span id="regionLabel">Fairbanks & Interior</span></div><div class="headline" id="headline">Loading live conditions…</div><div class="detail" id="detail">Checking NOAA aurora activity, local clouds, darkness, solar wind and moonlight.</div><label class="tonight-label" for="region">Viewing region</label><br><select id="region"><option value="fairbanks" selected>Fairbanks & Interior</option><option value="coldfoot">Coldfoot & Brooks Range</option><option value="denali">Denali</option><option value="talkeetna">Talkeetna</option><option value="anchorage">Anchorage & Mat-Su</option><option value="nome">Nome & Seward Peninsula</option><option value="juneau">Juneau & Southeast</option></select> <button id="refresh">Refresh</button><div class="factors"><div class="factor"><small>Aurora signal</small><strong id="oval">—</strong></div><div class="factor"><small>Best sky</small><strong id="cloud">—</strong></div><div class="factor"><small>Peak Kp 24h</small><strong id="kp">—</strong></div></div><div class="nights" id="nights"></div></div></div></section><div class="metrics"><div class="metric"><small>Current Kp</small><b id="currentKp">—</b></div><div class="metric"><small>Solar wind speed</small><b id="speed">—</b></div><div class="metric"><small>Bz GSM</small><b id="bz">—</b></div><div class="metric"><small>Moon illuminated</small><b id="moon">—</b></div></div><div class="truth"><strong>What this score means</strong><p>The 0–100 number is <em>our viewing score</em>, not a percent chance. It combines current NOAA space-weather signals with local NWS sky cover, darkness, moonlight and viewing thresholds for the selected Alaska region.</p></div><h2>Alaska Regional Outlook</h2><p>Alaska sits under and near the auroral oval, so even modest geomagnetic activity can produce displays. Summer daylight is often the limiting factor.</p><div class="regions" id="regions"></div><section id="state-sky-lab" aria-labelledby="stateSkyHeading" data-aurora-visuals="2">
 <div class="sky-intro"><div class="sky-kicker">Live aurora visual desk · Alaska</div><h2 id="stateSkyHeading">Fairbanks, Denali, Anchorage, or the far north?</h2><p>Much of Interior Alaska lies under or near the auroral oval; a low Kp can still matter. In May–July, darkness rather than space weather is often the limiting factor.</p></div>
 <article class="sky-panel" aria-label="Alaska map of aurora viewing regions"><div class="sky-panel-head"><h3>Explore the viewing regions</h3><p>Choose a marked region to update the live Viewing Score at the top of this page. Pin locations are <strong>regional reference points</strong>, not exact public parking or viewing entrances.</p></div>
-<div id="stateRegionMap" role="region" aria-label="Map of Alaska aurora viewing regions"></div>
+<div class="sky-map-shell"><div id="stateRegionMap" role="region" aria-label="Map of Alaska aurora viewing regions"></div><a id="stateMaptoolkitBrand" class="sky-map-brand" href="https://www.maptoolkit.com/" target="_blank" rel="noopener noreferrer" title="Maptoolkit basemap attribution"><img src="https://www.maptoolkit.org/assets/maptoolkit-attribution.png" width="128" height="24" alt="Maptoolkit"></a></div><p class="sky-map-layer-status" id="stateMapLayerStatus" role="status">Loading the key-free dark map…</p>
 <div class="sky-map-notes"><div id="stateSkyRegionButtons" class="sky-region-tabs" role="group" aria-label="Choose a live regional forecast"></div><div id="stateSkyRegionSummary" class="sky-note" aria-live="polite">Select a region to see its forecast threshold and the current NOAA signal.</div><p>In Alaska the lights may be overhead or south, not just north. The markers represent large viewing regions, not safe road pullouts.</p></div>
 <div class="sky-spot-finder"><h4>Find one of the viewing locations in the field guide</h4><p class="sky-muted">These are genuine places researched below. Each link opens a location-name search on OpenStreetMap; it is not a verified gate or parking-pin coordinate.</p><div id="stateSkySpots" class="sky-spots"></div></div></article>
 <div class="sky-tiles">
@@ -76,6 +87,7 @@
 <p><strong>Location and sky references:</strong> <a rel="noopener" href="https://www.explorefairbanks.com/explore-the-area/aurora-season/aurora-tracker/">Explore Fairbanks aurora season</a> · <a rel="noopener" href="https://www.travelalaska.com/explore-alaska/articles/best-places-see-northern-lights-alaska">Travel Alaska viewing locations</a> · <a rel="noopener" href="https://www.nps.gov/dena/planyourvisit/winter-activities.htm">NPS Denali winter access</a> · <a rel="noopener" href="https://www.nps.gov/dena/planyourvisit/hours.htm">NPS Denali seasonal hours</a>. Live signal reference: <a rel="noopener" href="https://www.swpc.noaa.gov/products/aurora-30-minute-forecast">NOAA 30-minute aurora forecast</a>.</p>
 </section>
 <h2>How to use this tonight</h2><div class="truth"><p><strong>1.</strong> Start with the headline and score. <strong>2.</strong> Check cloud cover and the best dark window. <strong>3.</strong> Use the regional cards to decide whether driving north or toward darker sky is justified. <strong>4.</strong> Before leaving, check NOAA's official 30-minute aurora forecast.</p><p>In Alaska, darkness can matter more than Kp in late spring and summer. The tool suppresses a numeric viewing score when there is no useful darkness.</p></div><h2>Data and truth boundaries</h2><p>NOAA OVATION is a short-term modeled aurora signal. Kp is a broad geomagnetic index. Neither is a local sighting probability. A display can be hidden by clouds, twilight, moonlight, light pollution, terrain or a blocked northern horizon. Missing live values remain missing; this tool never converts missing data into a reassuring zero.</p><ul class="source-list" id="sources"></ul><div class="footer">Built as an independent state tool. The original Michigan Northern Lights tool remains separate and unchanged. <a href="https://chrisizworski.com/northern-lights-michigan/">Michigan Northern Lights</a>.</div></main><script>const REGIONS=[{"id":"fairbanks","label":"Fairbanks & Interior","places":"Fairbanks, Chena Hot Springs, Interior Alaska","latitude":64.8378,"longitude":-147.7164,"planning_kp":1},{"id":"coldfoot","label":"Coldfoot & Brooks Range","places":"Coldfoot, Wiseman, Brooks Range","latitude":67.2524,"longitude":-150.1761,"planning_kp":0},{"id":"denali","label":"Denali","places":"Denali, Healy, Cantwell","latitude":63.1148,"longitude":-151.1926,"planning_kp":1},{"id":"talkeetna","label":"Talkeetna","places":"Talkeetna and the upper Susitna Valley","latitude":62.3209,"longitude":-150.1066,"planning_kp":1},{"id":"anchorage","label":"Anchorage & Mat-Su","places":"Anchorage, Palmer, Wasilla, Mat-Su Valley","latitude":61.2181,"longitude":-149.9003,"planning_kp":2},{"id":"nome","label":"Nome & Seward Peninsula","places":"Nome and the Seward Peninsula","latitude":64.5011,"longitude":-165.4064,"planning_kp":1},{"id":"juneau","label":"Juneau & Southeast","places":"Juneau, Gustavus, Glacier Bay and Southeast Alaska","latitude":58.3019,"longitude":-134.4197,"planning_kp":3}];const $=id=>document.getElementById(id);const val=(x,suffix="")=>x===null||x===undefined?"—":`${x}${suffix}`;async function load(){const id=$("region").value;const meta=REGIONS.find(r=>r.id===id);$("regionLabel").textContent=meta?.label||"Alaska";$("headline").textContent="Loading live conditions…";$("detail").textContent="Checking NOAA and NWS sources.";try{const r=await fetch(`https://alaska-aurora-live.vercel.app/api/aurora?region=${encodeURIComponent(id)}`,{cache:"no-store"});if(!r.ok)throw new Error(`API ${r.status}`);const d=await r.json();const v=d.verdict||{};$("score").textContent=v.score??"—";$("gauge").style.setProperty("--deg",`${(v.score??0)*3.6}deg`);$("headline").textContent=v.label||"Live conditions unavailable";$("detail").textContent=v.reason||"";$("oval").textContent=val(d.conditions?.local_ovation);$("cloud").textContent=val(d.conditions?.cloud_percent,"%");$("kp").textContent=val(d.conditions?.peak_24h_kp);$("currentKp").textContent=val(d.conditions?.current_kp);$("speed").textContent=val(d.conditions?.solar_wind?.speed_km_s?Math.round(d.conditions.solar_wind.speed_km_s):null," km/s");$("bz").textContent=val(d.conditions?.solar_wind?.bz_gsm_nt!==null&&d.conditions?.solar_wind?.bz_gsm_nt!==undefined?Number(d.conditions.solar_wind.bz_gsm_nt).toFixed(1):null," nT");$("moon").textContent=val(d.conditions?.moon?.illumination_percent!==null&&d.conditions?.moon?.illumination_percent!==undefined?Math.round(d.conditions.moon.illumination_percent):null,"%");$("updated").textContent=d.fetched_at?`· UPDATED ${new Date(d.fetched_at).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"})}`:"";$("nights").innerHTML=(d.three_night_outlook||[]).map(n=>`<div class="night"><small>${n.date}</small><div>Peak Kp <strong>${n.kp}</strong></div></div>`).join("")||'<div class="night"><small>72-hour outlook unavailable</small></div>';$("regions").innerHTML=(d.regions||[]).map(x=>`<article class="region ${x.level}"><h3>${x.label}</h3><p>${x.places}</p><p>${x.level?x.level.toUpperCase():""} · planning Kp ${x.planning_kp} · OVATION ${x.ovation_value??"—"}</p></article>`).join("");$("sources").innerHTML=(d.sources||[]).map(s=>`<li>${s.available?"Live":"Unavailable"} — <a href="${s.url}" rel="noopener">${s.name}</a>${s.updated_at?` · updated ${s.updated_at}`:""}</li>`).join("");document.dispatchEvent(new CustomEvent("state-aurora-data",{detail:d}))}catch(e){$("headline").textContent="Live data could not be loaded";$("detail").textContent="The page will not fabricate conditions. Use NOAA's official Aurora 30-Minute Forecast and a local NWS cloud forecast."}}$("region").addEventListener("change",load);$("refresh").addEventListener("click",load);load();</script><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
 <script>(function(){
 "use strict";
 const regions=[{"id":"fairbanks","label":"Fairbanks & Interior","latitude":64.8378,"longitude":-147.7164,"planning_kp":1},{"id":"coldfoot","label":"Coldfoot & Brooks Range","latitude":67.2524,"longitude":-150.1761,"planning_kp":0},{"id":"denali","label":"Denali","latitude":63.1148,"longitude":-151.1926,"planning_kp":1},{"id":"talkeetna","label":"Talkeetna","latitude":62.3209,"longitude":-150.1066,"planning_kp":1},{"id":"anchorage","label":"Anchorage & Mat-Su","latitude":61.2181,"longitude":-149.9003,"planning_kp":2},{"id":"nome","label":"Nome & Seward Peninsula","latitude":64.5011,"longitude":-165.4064,"planning_kp":1},{"id":"juneau","label":"Juneau & Southeast","latitude":58.3019,"longitude":-134.4197,"planning_kp":3}];
@@ -88,10 +100,21 @@ const mapEl=el("stateRegionMap");
 let map=null,markers=new Map(),lastData=null;
 const regionSelect=el("region");
 function currentRegion(){return regions.find(r=>r.id===regionSelect.value)||regions[0];}
+
 function selectRegion(id){
- if(!regions.some(r=>r.id===id))return;
+ const r=regions.find(x=>x.id===id);if(!r)return;
  if(regionSelect.value!==id){regionSelect.value=id;regionSelect.dispatchEvent(new Event("change",{bubbles:true}));}
- if(map&&markers.has(id)){const m=markers.get(id);m.openPopup();map.panTo(m.getLatLng(),{animate:false});}
+ if(map&&markers.has(id)){
+  const marker=markers.get(id);
+  if(visualMode==="vector"){
+   map.jumpTo({center:[r.longitude,r.latitude]});
+   const pop=marker.getPopup();
+   if(pop&&!pop.isOpen())pop.addTo(map);
+  }else if(visualMode==="raster"){
+   map.panTo([r.latitude,r.longitude],{animate:false});
+   marker.openPopup();
+  }
+ }
  updateLocal(null);
 }
 function updateLocal(data){
@@ -103,23 +126,83 @@ function updateLocal(data){
  " Darkness, cloud and moonlight can still prevent a sighting.";
  el("stateSkyRegionSummary").textContent=text;
  for(const btn of el("stateSkyRegionButtons").querySelectorAll("button"))btn.setAttribute("aria-pressed",String(btn.dataset.region===selected.id));
- for(const [id,m] of markers){const r=(data?.regions||lastData?.regions||[]).find(x=>x.id===id);const c=palette[r?.level]||palette.unavailable;const isSelected=id===selected.id;m.setStyle({radius:isSelected?11:8,fillColor:c,color:isSelected?"#fff":"#283744",weight:isSelected?3:1.7,fillOpacity:.94});}
+ for(const [id,m] of markers){
+  const r=(data?.regions||lastData?.regions||[]).find(x=>x.id===id);
+  const c=palette[r?.level]||palette.unavailable;
+  const isSelected=id===selected.id;
+  if(visualMode==="vector"){
+   const button=m.getElement();button.style.backgroundColor=c;button.style.borderColor=isSelected?"#fff":"#283744";
+   button.style.borderWidth=isSelected?"3px":"2px";button.style.width=(isSelected?22:17)+"px";button.style.height=(isSelected?22:17)+"px";
+  }else if(visualMode==="raster"){m.setStyle({radius:isSelected?11:8,fillColor:c,color:isSelected?"#fff":"#283744",weight:isSelected?3:1.7,fillOpacity:.94});}
+ }
+}
+function popupFor(r){
+ const popup=document.createElement("div");
+ const head=document.createElement("strong");head.textContent=r.label;
+ const p=document.createElement("p");p.textContent="Regional forecast · Kp "+r.planning_kp+" planning trigger (not a viewing-site pin).";p.style.margin="6px 0";
+ const button=document.createElement("button");button.type="button";button.textContent="Use this regional forecast";
+ button.style.cssText="background:#245b49;border:0;color:#fff;font:600 12px system-ui;padding:8px 10px;border-radius:5px;cursor:pointer";
+ button.addEventListener("click",()=>selectRegion(r.id));
+ popup.append(head,p,button);return popup;
+}
+let visualMode="none";
+function fallbackRaster(reason){
+ if(visualMode==="raster")return;
+ try{if(map&&typeof map.remove==="function")map.remove();}catch{}
+ map=null;markers.clear();mapEl.replaceChildren();
+ const brand=el("stateMaptoolkitBrand");if(brand)brand.hidden=true;
+ if(!window.L){mapEl.textContent="Map unavailable. Use the live region buttons and viewing-location guide below.";return;}
+ try{
+  map=L.map(mapEl,{scrollWheelZoom:false,zoomControl:true,attributionControl:true});
+  visualMode="raster";
+  // Only a fallback: OSM raster tiles are loaded when the community vector layer fails.
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:18,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'}).addTo(map);
+  const bounds=[];
+  for(const r of regions){
+   bounds.push([r.latitude,r.longitude]);
+   const m=L.circleMarker([r.latitude,r.longitude],{radius:8,color:"#283744",weight:1.7,fillColor:palette.unavailable,fillOpacity:.94}).addTo(map);
+   m.bindPopup(popupFor(r));m.on("click",()=>selectRegion(r.id));markers.set(r.id,m);
+  }
+  if(bounds.length)map.fitBounds(bounds,{padding:[25,25],maxZoom:7});
+  el("stateMapLayerStatus").textContent="Map view: OpenStreetMap fallback, no API key. Your regional forecast still works.";
+  updateLocal(null);
+ }catch(e){mapEl.textContent="The map is temporarily unavailable. Use the region controls below.";visualMode="none";}
 }
 function initMap(){
  if(!mapEl)return;
- if(!window.L){mapEl.innerHTML='<div style="padding:24px;color:#fff">Interactive map unavailable. The region buttons below still work and the field guide lists real viewing locations.</div>';return;}
+ // CARTO raster maps began water-marking keyless tiles in September 2026.
+ // Use an openly licensed, unmetered vector service instead.
+ if(!window.maplibregl){fallbackRaster("map renderer unavailable");return;}
  try{
- map=L.map(mapEl,{scrollWheelZoom:false,zoomControl:true,attributionControl:true});
- L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",{subdomains:"abcd",maxZoom:18,attribution:"&copy; OpenStreetMap contributors &copy; CARTO"}).addTo(map);
- const bounds=[];
- for(const r of regions){
-  const pos=[r.latitude,r.longitude];bounds.push(pos);
-  const m=L.circleMarker(pos,{radius:8,color:"#283744",weight:1.7,fillColor:palette.unavailable,fillOpacity:.94}).addTo(map);
-  const popup=document.createElement("div");const head=document.createElement("strong");head.textContent=r.label;const p=document.createElement("p");p.textContent="Regional forecast · Kp "+r.planning_kp+" planning trigger (not a viewing-site pin).";p.style.margin="6px 0";const button=document.createElement("button");button.type="button";button.textContent="Use this regional forecast";button.style.cssText="background:#245b49;border:0;color:#fff;font:600 12px system-ui;padding:8px 10px;border-radius:5px;cursor:pointer";button.addEventListener("click",()=>selectRegion(r.id));popup.append(head,p,button);m.bindPopup(popup);markers.set(r.id,m);m.on("click",()=>selectRegion(r.id));
- }
- if(bounds.length)map.fitBounds(bounds,{padding:[25,25],maxZoom:8});
- updateLocal(null);
- }catch(err){mapEl.innerHTML='<div style="padding:24px;color:#fff">Map tiles could not be initialized; use the regional forecast buttons and the viewing-location guide below.</div>';}
+  map=new maplibregl.Map({
+   container:mapEl,style:"https://styles.maptoolkit.org/dark.json",
+   center:[regions[0].longitude,regions[0].latitude],zoom:4,
+   scrollZoom:false,attributionControl:false,
+   maxZoom:15
+  });
+  visualMode="vector";
+  map.addControl(new maplibregl.NavigationControl({showCompass:false}),"top-right");
+  map.addControl(new maplibregl.AttributionControl({compact:false,customAttribution:'&copy; <a href="https://www.maptoolkit.com/copyright/">Maptoolkit</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}),"bottom-right");
+  map.on("error",event=>{
+   // Do not silently render an empty map if the vector style failed.
+   if(visualMode==="vector"&&!map.isStyleLoaded()&&(event?.error?.message||"").match(/style|fetch|404|403|failed/i))fallbackRaster("vector style unavailable");
+  });
+  const bounds=new maplibregl.LngLatBounds();
+  for(const r of regions){
+   const pos=[r.longitude,r.latitude];bounds.extend(pos);
+   const pin=document.createElement("button");pin.type="button";pin.className="sky-map-pin";
+   pin.setAttribute("aria-label","View the "+r.label+" live forecast");
+   pin.title=r.label+" · Kp "+r.planning_kp+" planning threshold";
+   pin.style.cssText="display:block;width:17px;height:17px;border:2px solid #283744;border-radius:50%;background:#9daeba;cursor:pointer;box-shadow:0 0 0 2px rgba(255,255,255,.3)";
+   pin.addEventListener("click",()=>selectRegion(r.id));
+   const marker=new maplibregl.Marker({element:pin,anchor:"center"}).setLngLat(pos)
+     .setPopup(new maplibregl.Popup({offset:13,closeButton:true}).setDOMContent(popupFor(r))).addTo(map);
+   markers.set(r.id,marker);
+  }
+  if(!bounds.isEmpty())map.fitBounds(bounds,{padding:35,maxZoom:7,duration:0});
+  el("stateMapLayerStatus").textContent="Key-free dark vector map · Maptoolkit and OpenStreetMap. Tap a region to update its live forecast.";
+  updateLocal(null);
+ }catch(err){fallbackRaster("map initialization failed");}
 }
 function drawChart(d){
  const svg=el("stateKpChart"),status=el("stateKpChartStatus");while(svg.firstChild)svg.removeChild(svg.firstChild);
