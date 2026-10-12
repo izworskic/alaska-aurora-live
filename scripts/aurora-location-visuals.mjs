@@ -3,7 +3,7 @@
 const esc = (v='') => String(v).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
 const safeJSON = v => JSON.stringify(v).replaceAll('<','\\u003c');
 
-export const locationVisualCSS = String.raw\`
+export const locationVisualCSS = String.raw`
 .loc-visuals{margin:25px 0 37px;font:14px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}
 .loc-visuals h2{font:400 26px/1.3 Georgia,serif;border:0;padding:0;margin:8px 0 9px;color:inherit}
 .loc-visuals h3{font:600 20px/1.3 Georgia,serif;color:#22483e;margin:0 0 7px}
@@ -39,7 +39,7 @@ export const locationVisualCSS = String.raw\`
 .loc-visuals .leaflet-popup-content{font:12px/1.5 system-ui,sans-serif}
 .loc-map-link{color:#225b44;font-weight:600}
 @media(max-width:720px){.loc-grid{grid-template-columns:1fr}.loc-panel-wide{grid-column:span 1}.loc-map{height:310px}.loc-head{padding:18px}.loc-visuals h2{font-size:23px}}
-\`;
+`;
 
 export const locationVisualHead = '<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css"><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">';
 
@@ -47,7 +47,7 @@ export function renderLocationVisuals(l,r,state){
  const spots=(l.viewing_sites||[]).map(site=>'<a href="https://www.openstreetmap.org/search?query='+encodeURIComponent(site.name+', '+l.name+', '+state.name)+'" target="_blank" rel="noopener noreferrer">'+esc(site.name)+'<small>Look up this named area — not a confirmed parking coordinate</small></a>').join('');
  return '<section class="loc-visuals" id="location-aurora-visuals" aria-labelledby="locVisualHeading"><div class="loc-head"><div class="loc-kicker">Explore the night sky · '+esc(l.name)+'</div><h2 id="locVisualHeading">What does the aurora forecast look like here?</h2><p>Use the regional map, the latest NOAA auroral-oval model, and the real 72-hour planetary Kp forecast together with the live local cloud and darkness assessment above. They are planning tools, not a sighting guarantee.</p></div><div class="loc-grid"><section class="loc-panel loc-panel-wide" aria-label="'+esc(l.name)+' interactive forecast map"><div class="loc-panel-head"><h3>'+esc(l.name)+' in the aurora network</h3><p>The highlighted marker represents the '+esc(r.label)+' forecast region. Other markers are regional model reference points, not suggested parking locations. Select a marker for that area’s own forecast.</p></div><div class="loc-map-shell"><div id="loc-aurora-map" class="loc-map" role="region" aria-label="'+esc(l.name)+' and neighboring aurora forecast regions"></div><a id="loc-maptoolkit-brand" class="loc-map-brand" href="https://www.maptoolkit.com/" target="_blank" rel="noopener noreferrer" title="Maptoolkit attribution"><img src="https://www.maptoolkit.org/assets/maptoolkit-attribution.png" alt="Maptoolkit" width="128" height="24"></a></div><div id="loc-map-status" class="loc-map-status" role="status">Loading the key-free dark map…</div><p class="loc-map-caption">Showing the region behind this live local forecast. Map markers are broad modeling centers; use the location-name search links and check legal access before traveling.</p><div class="loc-place-links"><h4>Places to investigate near '+esc(l.name)+'</h4>'+spots+'</div></section><section class="loc-panel"><div class="loc-panel-head"><h3>Live NOAA auroral oval</h3><p>NOAA’s Northern Hemisphere 30-minute model. The illuminated band indicates modeled auroral activity, not a local camera or visibility probability.</p></div><img id="loc-noaa-oval" class="loc-oval" src="https://services.swpc.noaa.gov/images/aurora-forecast-northern-hemisphere.jpg" alt="NOAA modeled aurora oval over the Northern Hemisphere" loading="lazy" width="700" height="700"><div id="loc-noaa-error" class="loc-oval-error" hidden>NOAA’s image is unavailable here. <a href="https://www.swpc.noaa.gov/products/aurora-30-minute-forecast" target="_blank" rel="noopener noreferrer">View the official aurora forecast</a>.</div><div class="loc-visual-note">Source: <a href="https://www.swpc.noaa.gov/products/aurora-30-minute-forecast" target="_blank" rel="noopener noreferrer">NOAA SWPC</a> · the image refreshes on NOAA’s schedule.</div></section><section class="loc-panel"><div class="loc-panel-head"><h3>72-hour Kp forecast for planning</h3><p>Three-hour samples from NOAA, plotted against this region’s approximate Kp '+esc(r.planning_kp)+' planning threshold. The line is not a hard cutoff.</p></div><div class="loc-chart-wrap"><svg id="loc-kp-chart" class="loc-chart" role="img" aria-label="NOAA 72-hour Kp forecast for '+esc(l.name)+'" viewBox="0 0 740 240" preserveAspectRatio="xMidYMid meet"></svg><div id="loc-kp-chart-status" class="loc-chart-status" role="status">Retrieving NOAA forecast values…</div></div><div class="loc-visual-note">Kp is planetary. Local cloud, darkness, horizon, and NOAA OVATION values still determine how useful the forecast is. <a href="https://www.swpc.noaa.gov/products/3-day-forecast" target="_blank" rel="noopener noreferrer">NOAA 3-day source</a>.</div></section></div></section>';
 }
-const locationVisualJS = String.raw\`
+const locationVisualJS = String.raw`
 (function(){
 "use strict";
 const cfg=__CONFIG__;
@@ -143,7 +143,7 @@ if(oval){
 document.addEventListener("aurora-location-live-data",event=>paintKp(event.detail));
 document.addEventListener("aurora-location-live-error",()=>{const s=document.getElementById("loc-kp-chart-status");if(s)s.textContent="The live feed is unavailable. No chart values are being estimated."});
 initMap();
-})();\`;
+})();`;
 export function locationVisualScript(l,r,state,locations){
  const info={name:state.name,canonical:state.canonical,region:{id:r.id,label:r.label,planning_kp:r.planning_kp,latitude:r.latitude,longitude:r.longitude},selected:r.id,timezone:state.time_zone_fallback,regions:state.regions.map(x=>({id:x.id,label:x.label,latitude:x.latitude,longitude:x.longitude,planning_kp:x.planning_kp})),pages:locations.map(x=>({slug:x.slug,name:x.name,region_id:x.region_id}))};
  const script=locationVisualJS.replace('__CONFIG__',safeJSON(info));
