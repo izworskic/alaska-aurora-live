@@ -47,3 +47,16 @@ test("all new and existing inline scripts parse without changing the score algor
  for(const m of inline)new vm.Script(m[2],{filename:"index-inline.js"});
  assert.equal((html.match(/const r=await fetch\(/g)||[]).length,1,"existing page should issue only one aurora API call per region change");
 });
+
+test("key-free map renderer preserves interactive regional selection and visible attribution",()=>{
+ assert.ok(!html.includes("basemaps.cartocdn.com"),"CARTO now watermarks tiles without an API key");
+ assert.ok(html.includes('style:"https://styles.maptoolkit.org/dark.json"'));
+ assert.ok(html.includes("maplibre-gl@5.6.1/dist/maplibre-gl.js"));
+ assert.ok(html.includes("stateMaptoolkitBrand"));
+ assert.ok(html.includes("maptoolkit-attribution.png"));
+ assert.ok(html.includes("www.openstreetmap.org/copyright"));
+ assert.ok(html.includes("tile.openstreetmap.org"),"open-source raster backup must remain available");
+ assert.ok(html.includes("maplibregl.Marker"));
+ assert.ok(html.includes("regionSelect.dispatchEvent"),"map selection must refresh the live score");
+ assert.ok(html.includes("if(visualMode===\"vector\")")&&html.includes("if(visualMode===\"raster\")"));
+});
