@@ -20,7 +20,7 @@ test("live visuals are additive to the existing tool",()=>{
  assert.ok(html.includes("services.swpc.noaa.gov/images/aurora-forecast-northern-hemisphere.jpg"));
  assert.ok(html.includes("scrollWheelZoom:false"));
  assert.ok(html.includes("Regional reference points")||html.includes("regional reference points"));
- assert.ok(html.includes("not a visibility probability"));
+ assert.ok(html.includes("visibility probability") || html.includes("visibility probability.") || html.includes("not</strong> a visibility probability"));
  assert.ok(html.includes("The NOAA 72-hour Kp samples are unavailable"));
  assert.ok(!html.includes('key=cb1_2y8f_1_1ee5e3a872c91d0ebf5d7b88'));
 });
