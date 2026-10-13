@@ -11,7 +11,7 @@ test("iconic destinations have distinct source-supported intentions, complete lo
   assert.ok(l.name.length>5&&l.context.length>=145&&l.decision_note.length>=140,l.slug+" needs unique content");
   assert.ok(l.field_notes?.sky?.length>=90&&l.field_notes?.decision?.length>=95&&l.field_notes?.access?.length>=90,l.slug+" needs genuine local decision depth");
   assert.ok(l.viewing_sites?.length>=3,l.slug+" needs three researched locations");
-  assert.ok(l.sources?.length>=1&&l.sources.every(s=>/^https:\/\/.test(s.url)&&s.label.length>8),l.slug+" requires cited real sources");
+  assert.ok(l.sources?.length>=1&&l.sources.every(s=>String(s.url).startsWith("https://")&&s.label.length>8),l.slug+" requires cited real sources");
   assert.ok(state.regions.some(r=>r.id===l.region_id),l.slug+" uses an unsupported model region");
   assert.ok(l.short_card.length>=65&&l.meta_description.length>=85);
  }
