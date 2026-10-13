@@ -33,5 +33,14 @@ for(const loc of locationPages){
  if(body.includes('basemaps.cartocdn.com'))failures.push(loc.slug+": key-gated CARTO is forbidden");
  if(!body.includes('"selected":"'+region.id+'"'))failures.push(loc.slug+": incorrect region in map visual");
 }
+
+const {runQualityAudit}=await import('./audit-aurora-quality.mjs');
+const qualityReport=runQualityAudit();
+fs.mkdirSync(path.join(root,'artifacts'),{recursive:true});
+fs.writeFileSync(path.join(root,'artifacts','aurora-quality-gate.json'),JSON.stringify(qualityReport,null,2)+'\n');
+for(const item of qualityReport.audits){
+ if(item.pass) console.log('Aurora quality PASS '+item.url+' ('+item.score+'/'+item.max+')');
+ else failures.push('Aurora quality FAIL '+(item.url||item.name)+': '+(item.failed||[]).join('; '));
+}
 if(failures.length){console.error(failures.join("\n"));process.exit(1);}
 console.log(`Validated ${state.name} Aurora build: ${html.length} bytes`);
